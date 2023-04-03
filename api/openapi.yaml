@@ -1,0 +1,1076 @@
+openapi: 3.0.0
+info:
+  description: 阿波罗客户端
+  title: 阿波罗客户端
+  version: v0.0.2
+servers:
+- description: 域名
+  url: http://config-admin.test.huajiao.com/openapi/v1
+security:
+- ApiKeyAuth: []
+paths:
+  /apps/{appId}/envclusters:
+    get:
+      description: |
+        获取App的环境，集群信息
+      operationId: getEnvClustersById
+      parameters:
+      - description: 应用id
+        explode: false
+        in: path
+        name: appId
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "401":
+          description: 接口传入的token非法或者已过期，客户端需要检查token是否传入正确。
+          headers:
+            Authorization:
+              explode: false
+              schema:
+                type: string
+              style: simple
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/envCluster'
+                type: array
+          description: 说明
+      summary: 获取App的环境，集群信息
+  /apps:
+    get:
+      description: |
+        获取App信息
+      operationId: getAppInfo
+      responses:
+        "401":
+          description: 接口传入的token非法或者已过期，客户端需要检查token是否传入正确。
+          headers:
+            Authorization:
+              explode: false
+              schema:
+                type: string
+              style: simple
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/appInfo'
+                type: array
+          description: 说明
+      summary: 获取App信息
+  /envs/{env}/apps/{appId}/clusters/{clusterName}/namespaces/{namespaceName}/items/{key}:
+    delete:
+      description: 删除配置接口
+      operationId: deleteField
+      parameters:
+      - description: 应用id
+        explode: false
+        in: path
+        name: appId
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: 环境
+        explode: false
+        in: path
+        name: env
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: 集群名称
+        explode: false
+        in: path
+        name: clusterName
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: 命名空间名称
+        explode: false
+        in: path
+        name: namespaceName
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: 字段名
+        explode: false
+        in: path
+        name: key
+        required: true
+        schema:
+          type: string
+        style: simple
+      - allowReserved: true
+        description: 删除配置的操作者，域账号
+        explode: true
+        in: query
+        name: operator
+        required: true
+        schema:
+          type: string
+        style: form
+      responses:
+        "401":
+          description: 接口传入的token非法或者已过期，客户端需要检查token是否传入正确。
+          headers:
+            Authorization:
+              explode: false
+              schema:
+                type: string
+              style: simple
+        "200":
+          description: 该接口没有返回值
+      summary: 删除配置接口
+    get:
+      description: 读取配置接口
+      operationId: getField
+      parameters:
+      - description: 应用id
+        explode: false
+        in: path
+        name: appId
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: 环境
+        explode: false
+        in: path
+        name: env
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: 集群名称
+        explode: false
+        in: path
+        name: clusterName
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: 命名空间名称
+        explode: false
+        in: path
+        name: namespaceName
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: 字段名
+        explode: false
+        in: path
+        name: key
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "401":
+          description: 接口传入的token非法或者已过期，客户端需要检查token是否传入正确。
+          headers:
+            Authorization:
+              explode: false
+              schema:
+                type: string
+              style: simple
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/field'
+          description: 说明
+      summary: 读取配置接口
+    put:
+      description: 修改配置接口
+      operationId: putField
+      parameters:
+      - description: 应用id
+        explode: false
+        in: path
+        name: appId
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: 环境
+        explode: false
+        in: path
+        name: env
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: 集群名称
+        explode: false
+        in: path
+        name: clusterName
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: 命名空间名称
+        explode: false
+        in: path
+        name: namespaceName
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: 字段名
+        explode: false
+        in: path
+        name: key
+        required: true
+        schema:
+          type: string
+        style: simple
+      - allowReserved: true
+        description: 当配置不存在时是否自动创建
+        explode: true
+        in: query
+        name: createIfNotExists
+        required: false
+        schema:
+          type: boolean
+        style: form
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/fieldPut'
+        description: 携带参数
+        required: true
+      responses:
+        "401":
+          description: 接口传入的token非法或者已过期，客户端需要检查token是否传入正确。
+          headers:
+            Authorization:
+              explode: false
+              schema:
+                type: string
+              style: simple
+        "200":
+          description: 该接口没有返回值
+      summary: 修改配置接口
+  /envs/{env}/apps/{appId}/clusters/{clusterName}/namespaces/{namespaceName}/items:
+    post:
+      description: 新增配置接口
+      operationId: postField
+      parameters:
+      - description: 应用id
+        explode: false
+        in: path
+        name: appId
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: 环境
+        explode: false
+        in: path
+        name: env
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: 集群名称
+        explode: false
+        in: path
+        name: clusterName
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: 命名空间名称
+        explode: false
+        in: path
+        name: namespaceName
+        required: true
+        schema:
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/fieldBase'
+        description: post携带参数
+        required: true
+      responses:
+        "401":
+          description: 接口传入的token非法或者已过期，客户端需要检查token是否传入正确。
+          headers:
+            Authorization:
+              explode: false
+              schema:
+                type: string
+              style: simple
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/field'
+          description: 说明
+      summary: 新增配置接口
+  /envs/{env}/releases/{releaseId}/rollback:
+    put:
+      description: 回滚已发布配置接口
+      operationId: rollback
+      parameters:
+      - description: 删除配置的操作者，域账号
+        explode: true
+        in: query
+        name: operator
+        required: true
+        schema:
+          type: string
+        style: form
+      - description: 发布记录id
+        explode: false
+        in: path
+        name: releaseId
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: 环境
+        explode: false
+        in: path
+        name: env
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "401":
+          description: 接口传入的token非法或者已过期，客户端需要检查token是否传入正确。
+          headers:
+            Authorization:
+              explode: false
+              schema:
+                type: string
+              style: simple
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/releases'
+          description: 说明
+      summary: 回滚已发布配置接口
+  /envs/{env}/apps/{appId}/clusters/{clusterName}/namespaces/{namespaceName}/releases/latest:
+    get:
+      description: 获取某个Namespace当前生效的已发布配置接口
+      operationId: getReleases
+      parameters:
+      - description: 应用id
+        explode: false
+        in: path
+        name: appId
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: 环境
+        explode: false
+        in: path
+        name: env
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: 集群名称
+        explode: false
+        in: path
+        name: clusterName
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: 命名空间名称
+        explode: false
+        in: path
+        name: namespaceName
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "401":
+          description: 接口传入的token非法或者已过期，客户端需要检查token是否传入正确。
+          headers:
+            Authorization:
+              explode: false
+              schema:
+                type: string
+              style: simple
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/releases'
+          description: 说明
+      summary: 获取生效配置接口
+  /envs/{env}/apps/{appId}/clusters/{clusterName}/namespaces/{namespaceName}/releases:
+    post:
+      description: 发布配置接口
+      operationId: postReleases
+      parameters:
+      - description: 应用id
+        explode: false
+        in: path
+        name: appId
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: 环境
+        explode: false
+        in: path
+        name: env
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: 集群名称
+        explode: false
+        in: path
+        name: clusterName
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: 命名空间名称
+        explode: false
+        in: path
+        name: namespaceName
+        required: true
+        schema:
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/releasesPost'
+        description: post携带参数
+        required: true
+      responses:
+        "401":
+          description: 接口传入的token非法或者已过期，客户端需要检查token是否传入正确。
+          headers:
+            Authorization:
+              explode: false
+              schema:
+                type: string
+              style: simple
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/releases'
+          description: 说明
+      summary: 发布配置接口
+  /envs/{env}/apps/{appId}/clusters/{clusterName}/namespaces/{namespaceName}/lock:
+    get:
+      description: |
+        Apollo在生产环境（PRO）有限制规则：每次发布只能有一个人编辑配置，且该次发布的人不能是该次发布的编辑人。<br> 也就是说如果一个用户A修改了某个namespace的配置，那么在这个namespace发布前，只能由A修改，其它用户无法修改。<br> 同时，该用户A无法发布自己修改的配置，必须找另一个有发布权限的人操作。<br> 这个接口就是用来获取当前namespace是否有人锁定的接口。在非生产环境（FAT、UAT），该接口始终返回没有人锁定。<br>
+      operationId: getLock
+      parameters:
+      - description: 应用id
+        explode: false
+        in: path
+        name: appId
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: 环境
+        explode: false
+        in: path
+        name: env
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: 集群名称
+        explode: false
+        in: path
+        name: clusterName
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: 命名空间名称
+        explode: false
+        in: path
+        name: namespaceName
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "401":
+          description: 接口传入的token非法或者已过期，客户端需要检查token是否传入正确。
+          headers:
+            Authorization:
+              explode: false
+              schema:
+                type: string
+              style: simple
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/lock'
+          description: 说明
+      summary: 获取某个Namespace当前编辑人接口
+  /envs/{env}/apps/{appId}/clusters/{clusterName}/namespaces/{namespaceName}:
+    get:
+      description: |
+        获取某个Namespace信息接口
+      operationId: getNamespace
+      parameters:
+      - description: 应用id
+        explode: false
+        in: path
+        name: appId
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: 环境
+        explode: false
+        in: path
+        name: env
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: 集群名称
+        explode: false
+        in: path
+        name: clusterName
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: 命名空间名称
+        explode: false
+        in: path
+        name: namespaceName
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "401":
+          description: 接口传入的token非法或者已过期，客户端需要检查token是否传入正确。
+          headers:
+            Authorization:
+              explode: false
+              schema:
+                type: string
+              style: simple
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/namespace'
+          description: 说明
+      summary: 获取某个Namespace信息接口
+  /envs/{env}/apps/{appId}/clusters/{clusterName}/namespaces:
+    get:
+      description: |
+        获取集群下所有Namespace信息接口
+      operationId: getNamespaces
+      parameters:
+      - description: 应用id
+        explode: false
+        in: path
+        name: appId
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: 环境
+        explode: false
+        in: path
+        name: env
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: 集群名称
+        explode: false
+        in: path
+        name: clusterName
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "401":
+          description: 接口传入的token非法或者已过期，客户端需要检查token是否传入正确。
+          headers:
+            Authorization:
+              explode: false
+              schema:
+                type: string
+              style: simple
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/namespace'
+                type: array
+          description: 说明
+      summary: 获取集群下所有Namespace信息接口
+  /apps/{appId}/appnamespaces:
+    post:
+      description: |
+        可以通过此接口创建Namespace，调用此接口需要授予第三方APP对目标APP的管理权限。
+      operationId: postNamespace
+      parameters:
+      - description: 应用id
+        explode: false
+        in: path
+        name: appId
+        required: true
+        schema:
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/namespaceBase'
+        description: post携带参数
+        required: true
+      responses:
+        "401":
+          description: 接口传入的token非法或者已过期，客户端需要检查token是否传入正确。
+          headers:
+            Authorization:
+              explode: false
+              schema:
+                type: string
+              style: simple
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/namespaceInfo'
+          description: |
+            如果是properties文件，name = ${appId所属的部门}.${传入的name值} ，<br> 例如调用接口传入的name=xy-z, format=properties，应用的部门为框架（FX）,那么name=FX.xy-z <br> 如果不是properties文件 name = ${appId所属的部门}.${传入的name值}.${format}，<br> 例如调用接口传入的name=xy-z, format=json，应用的部门为框架（FX）,那么name=FX.xy-z.json<br>
+      summary: 创建Namespace
+  /envs/{env}/apps/{appId}/clusters/{clusterName}:
+    get:
+      description: |
+        获取集群接口
+      operationId: getClusters
+      parameters:
+      - description: 应用id
+        explode: false
+        in: path
+        name: appId
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: 环境
+        explode: false
+        in: path
+        name: env
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: 集群名称
+        explode: false
+        in: path
+        name: clusterName
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "401":
+          description: 接口传入的token非法或者已过期，客户端需要检查token是否传入正确。
+          headers:
+            Authorization:
+              explode: false
+              schema:
+                type: string
+              style: simple
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/clusterInfo'
+          description: 说明
+      summary: 获取集群接口
+  /envs/{env}/apps/{appId}/clusters:
+    post:
+      description: |
+        可以通过此接口创建集群，调用此接口需要授予第三方APP对目标APP的管理权限。
+      operationId: postClusters
+      parameters:
+      - description: 应用id
+        explode: false
+        in: path
+        name: appId
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: 环境
+        explode: false
+        in: path
+        name: env
+        required: true
+        schema:
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/clusterInfoBase'
+        description: post携带参数
+        required: true
+      responses:
+        "401":
+          description: 接口传入的token非法或者已过期，客户端需要检查token是否传入正确。
+          headers:
+            Authorization:
+              explode: false
+              schema:
+                type: string
+              style: simple
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/clusterInfo'
+          description: 说明
+      summary: 创建集群接口
+components:
+  responses:
+    UnauthorizedError:
+      description: 接口传入的token非法或者已过期，客户端需要检查token是否传入正确。
+      headers:
+        Authorization:
+          explode: false
+          schema:
+            type: string
+          style: simple
+  schemas:
+    lock:
+      example:
+        lockedBy: lockedBy
+        isLocked: true
+        namespaceName: namespaceName
+      properties:
+        namespaceName:
+          type: string
+        lockedBy:
+          type: string
+        isLocked:
+          type: boolean
+      type: object
+    namespaceBase:
+      properties:
+        name:
+          type: string
+        appId:
+          type: string
+        comment:
+          type: string
+        format:
+          type: string
+        isPublic:
+          type: boolean
+        dataChangeCreatedBy:
+          type: string
+      type: object
+    namespaceInfo:
+      example:
+        dataChangeCreatedTime: dataChangeCreatedTime
+        dataChangeLastModifiedBy: dataChangeLastModifiedBy
+        appId: appId
+        name: name
+        format: format
+        dataChangeCreatedBy: dataChangeCreatedBy
+        isPublic: true
+        comment: comment
+        dataChangeLastModifiedTime: dataChangeLastModifiedTime
+      properties:
+        name:
+          type: string
+        appId:
+          type: string
+        comment:
+          type: string
+        format:
+          type: string
+        isPublic:
+          type: boolean
+        dataChangeCreatedBy:
+          type: string
+        dataChangeLastModifiedBy:
+          type: string
+        dataChangeCreatedTime:
+          type: string
+        dataChangeLastModifiedTime:
+          type: string
+      type: object
+    namespace:
+      example:
+        dataChangeCreatedTime: dataChangeCreatedTime
+        dataChangeLastModifiedBy: dataChangeLastModifiedBy
+        appId: appId
+        clusterName: clusterName
+        format: format
+        dataChangeCreatedBy: dataChangeCreatedBy
+        isPublic: true
+        comment: comment
+        items:
+        - dataChangeCreatedTime: dataChangeCreatedTime
+          dataChangeLastModifiedBy: dataChangeLastModifiedBy
+          dataChangeCreatedBy: dataChangeCreatedBy
+          value: value
+          key: key
+          dataChangeLastModifiedTime: dataChangeLastModifiedTime
+        - dataChangeCreatedTime: dataChangeCreatedTime
+          dataChangeLastModifiedBy: dataChangeLastModifiedBy
+          dataChangeCreatedBy: dataChangeCreatedBy
+          value: value
+          key: key
+          dataChangeLastModifiedTime: dataChangeLastModifiedTime
+        namespaceName: namespaceName
+        dataChangeLastModifiedTime: dataChangeLastModifiedTime
+      properties:
+        appId:
+          type: string
+        clusterName:
+          type: string
+        namespaceName:
+          type: string
+        comment:
+          type: string
+        format:
+          type: string
+        isPublic:
+          type: boolean
+        items:
+          items:
+            $ref: '#/components/schemas/field'
+          type: array
+        dataChangeCreatedBy:
+          type: string
+        dataChangeLastModifiedBy:
+          type: string
+        dataChangeCreatedTime:
+          type: string
+        dataChangeLastModifiedTime:
+          type: string
+      type: object
+    field:
+      example:
+        dataChangeCreatedTime: dataChangeCreatedTime
+        dataChangeLastModifiedBy: dataChangeLastModifiedBy
+        dataChangeCreatedBy: dataChangeCreatedBy
+        value: value
+        key: key
+        dataChangeLastModifiedTime: dataChangeLastModifiedTime
+      properties:
+        key:
+          type: string
+        value:
+          type: string
+        dataChangeCreatedBy:
+          type: string
+        dataChangeLastModifiedBy:
+          type: string
+        dataChangeCreatedTime:
+          type: string
+        dataChangeLastModifiedTime:
+          type: string
+      type: object
+    fieldBase:
+      properties:
+        key:
+          type: string
+        value:
+          type: string
+        comment:
+          type: string
+        dataChangeCreatedBy:
+          type: string
+      type: object
+    fieldPut:
+      properties:
+        key:
+          type: string
+        value:
+          type: string
+        comment:
+          type: string
+        dataChangeLastModifiedBy:
+          type: string
+        dataChangeCreatedBy:
+          type: string
+      type: object
+    releasesPost:
+      properties:
+        releaseTitle:
+          type: string
+        releaseComment:
+          type: string
+        releasedBy:
+          type: string
+      type: object
+    releases:
+      example:
+        dataChangeCreatedTime: dataChangeCreatedTime
+        dataChangeLastModifiedBy: dataChangeLastModifiedBy
+        configurations:
+          timeout: timeout
+        appId: appId
+        clusterName: clusterName
+        name: name
+        dataChangeCreatedBy: dataChangeCreatedBy
+        comment: comment
+        namespaceName: namespaceName
+        dataChangeLastModifiedTime: dataChangeLastModifiedTime
+      properties:
+        appId:
+          type: string
+        clusterName:
+          type: string
+        namespaceName:
+          type: string
+        name:
+          type: string
+        configurations:
+          $ref: '#/components/schemas/releases_configurations'
+        comment:
+          type: string
+        dataChangeCreatedBy:
+          type: string
+        dataChangeLastModifiedBy:
+          type: string
+        dataChangeCreatedTime:
+          type: string
+        dataChangeLastModifiedTime:
+          type: string
+      type: object
+    clusterInfo:
+      example:
+        dataChangeCreatedTime: dataChangeCreatedTime
+        dataChangeLastModifiedBy: dataChangeLastModifiedBy
+        appId: appId
+        name: name
+        dataChangeCreatedBy: dataChangeCreatedBy
+        dataChangeLastModifiedTime: dataChangeLastModifiedTime
+      properties:
+        name:
+          type: string
+        appId:
+          type: string
+        dataChangeCreatedBy:
+          type: string
+        dataChangeLastModifiedBy:
+          type: string
+        dataChangeCreatedTime:
+          type: string
+        dataChangeLastModifiedTime:
+          type: string
+      type: object
+    clusterInfoBase:
+      properties:
+        name:
+          type: string
+        appId:
+          type: string
+        dataChangeCreatedBy:
+          type: string
+      type: object
+    appInfo:
+      example:
+        orgName: orgName
+        dataChangeCreatedTime: dataChangeCreatedTime
+        ownerName: ownerName
+        dataChangeLastModifiedBy: dataChangeLastModifiedBy
+        appId: appId
+        name: name
+        dataChangeCreatedBy: dataChangeCreatedBy
+        orgId: orgId
+        dataChangeLastModifiedTime: dataChangeLastModifiedTime
+        ownerEmail: ownerEmail
+      properties:
+        name:
+          type: string
+        appId:
+          type: string
+        orgId:
+          type: string
+        orgName:
+          type: string
+        ownerName:
+          type: string
+        ownerEmail:
+          type: string
+        dataChangeCreatedBy:
+          type: string
+        dataChangeLastModifiedBy:
+          type: string
+        dataChangeCreatedTime:
+          type: string
+        dataChangeLastModifiedTime:
+          type: string
+      type: object
+      xml:
+        name: appInfo
+    envCluster:
+      example:
+        env: env
+        clusters:
+        - clusters
+        - clusters
+      properties:
+        clusters:
+          items:
+            type: string
+          type: array
+          xml:
+            name: clusters
+            wrapped: true
+        env:
+          type: string
+      type: object
+      xml:
+        name: envCluster
+    releases_configurations:
+      example:
+        timeout: timeout
+      properties:
+        timeout:
+          type: string
+      type: object
+  securitySchemes:
+    ApiKeyAuth:
+      in: header
+      name: Authorization
+      type: apiKey
